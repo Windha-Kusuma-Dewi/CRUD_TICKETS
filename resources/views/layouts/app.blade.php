@@ -28,8 +28,12 @@
             padding: 2rem 0;
             margin-top: 3rem;
         }
+        pre code {
+            font-size: 0.85rem;
+        }
     </style>
     
+    {{-- Stack untuk CSS tambahan per halaman --}}
     @stack('styles')
 </head>
 <body>
@@ -48,26 +52,92 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    {{-- Tickets --}}
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('tickets.*') ? 'active' : '' }}" 
                            href="{{ route('tickets.index') }}">
                             <i class="bi bi-ticket-detailed"></i> Tickets
                         </a>
                     </li>
+                    
+                    {{-- Demo Blade (Hari 4) --}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('demo-blade.*') ? 'active' : '' }}" 
+                           href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-code-slash"></i> Demo Blade
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('demo-blade.index') }}">
+                                <i class="bi bi-house"></i> Overview
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('demo-blade.directives') }}">
+                                <i class="bi bi-signpost-split"></i> Directives
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('demo-blade.components') }}">
+                                <i class="bi bi-puzzle"></i> Components
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('demo-blade.includes') }}">
+                                <i class="bi bi-box-arrow-in-right"></i> Include & Each
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('demo-blade.stacks') }}">
+                                <i class="bi bi-stack"></i> Stacks & Push
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    {{-- XSS Lab (Hari 4) --}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('xss-lab.*') ? 'active' : '' }}" 
+                           href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-shield-exclamation"></i> XSS Lab
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('xss-lab.index') }}">
+                                <i class="bi bi-house"></i> Overview
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-header">Reflected XSS</li>
+                            <li><a class="dropdown-item text-danger" href="{{ route('xss-lab.reflected.vulnerable') }}">
+                                <i class="bi bi-unlock"></i> Vulnerable
+                            </a></li>
+                            <li><a class="dropdown-item text-success" href="{{ route('xss-lab.reflected.secure') }}">
+                                <i class="bi bi-lock"></i> Secure
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-header">Stored XSS</li>
+                            <li><a class="dropdown-item text-danger" href="{{ route('xss-lab.stored.vulnerable') }}">
+                                <i class="bi bi-unlock"></i> Vulnerable
+                            </a></li>
+                            <li><a class="dropdown-item text-success" href="{{ route('xss-lab.stored.secure') }}">
+                                <i class="bi bi-lock"></i> Secure
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-header">DOM-Based XSS</li>
+                            <li><a class="dropdown-item text-danger" href="{{ route('xss-lab.dom.vulnerable') }}">
+                                <i class="bi bi-unlock"></i> Vulnerable
+                            </a></li>
+                            <li><a class="dropdown-item text-success" href="{{ route('xss-lab.dom.secure') }}">
+                                <i class="bi bi-lock"></i> Secure
+                            </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 
                 <ul class="navbar-nav">
-                    {{-- Untuk sementara tampilkan user statis --}}
-                    {{-- Nanti di materi Auth akan diganti dengan @auth/@guest --}}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" 
                            data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> User Demo
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="bi bi-person"></i> Profile
+                            </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a></li>
                         </ul>
                     </li>
                 </ul>
@@ -127,6 +197,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
+    {{-- Stack untuk JavaScript tambahan per halaman --}}
     @stack('scripts')
 </body>
 </html>
