@@ -264,7 +264,6 @@
                             
                             <p><strong>Output:</strong></p>
                             <div class="bg-light p-3 border rounded">
-                                {{-- JANGAN LAKUKAN INI dengan user input! --}}
                                 <span class="text-danger">[Script akan dieksekusi!]</span>
                             </div>
                             <small class="text-danger">

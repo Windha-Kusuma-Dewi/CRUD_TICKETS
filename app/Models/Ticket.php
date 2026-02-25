@@ -5,25 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Comment;
 
-/**
- * Model Ticket
- * 
- * Representasi dari tabel 'tickets' di database
- * Sesuai dengan materi Hari 3 - MVC Laravel
- */
 class Ticket extends Model
 {
     use HasFactory;
 
-    /**
-     * Kolom yang boleh diisi secara mass-assignment
-     * 
-     * PENTING untuk keamanan!
-     * Hanya kolom yang didefinisikan di sini yang bisa diisi via create() atau update()
-     * 
-     * @var array<int, string>
-     */
     protected $fillable = [
         'user_id',
         'title',
@@ -32,35 +20,18 @@ class Ticket extends Model
         'priority',
     ];
 
-    /**
-     * Casting tipe data otomatis
-     * 
-     * Laravel akan otomatis mengkonversi tipe data saat mengambil/menyimpan
-     * 
-     * @var array<string, string>
-     */
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Nilai default untuk atribut
-     * 
-     * @var array<string, mixed>
-     */
     protected $attributes = [
         'status' => 'open',
         'priority' => 'medium',
     ];
 
     /**
-     * Relasi: Ticket belongs to User
-     * 
-     * Setiap tiket dimiliki oleh satu user
-     * Penggunaan: $ticket->user->name
-     * 
-     * @return BelongsTo
+     * Ticket belongs to User
      */
     public function user(): BelongsTo
     {
@@ -68,9 +39,15 @@ class Ticket extends Model
     }
 
     /**
-     * Scope untuk filter tiket berdasarkan status
-     * 
-     * Penggunaan: Ticket::status('open')->get()
+     * Ticket has many Comments
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Scope filter status
      */
     public function scopeStatus($query, string $status)
     {
@@ -78,9 +55,7 @@ class Ticket extends Model
     }
 
     /**
-     * Scope untuk filter tiket berdasarkan prioritas
-     * 
-     * Penggunaan: Ticket::priority('high')->get()
+     * Scope filter priority
      */
     public function scopePriority($query, string $priority)
     {
@@ -88,9 +63,7 @@ class Ticket extends Model
     }
 
     /**
-     * Accessor untuk mendapatkan badge class berdasarkan status
-     * 
-     * Penggunaan: $ticket->status_badge
+     * Status badge accessor
      */
     public function getStatusBadgeAttribute(): string
     {
@@ -103,9 +76,7 @@ class Ticket extends Model
     }
 
     /**
-     * Accessor untuk mendapatkan badge class berdasarkan prioritas
-     * 
-     * Penggunaan: $ticket->priority_badge
+     * Priority badge accessor
      */
     public function getPriorityBadgeAttribute(): string
     {
