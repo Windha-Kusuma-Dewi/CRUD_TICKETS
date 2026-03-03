@@ -663,6 +663,59 @@
                     </ul>
                 </li>
 
+                {{-- Auth Lab --}}
+                <li class="nav-item">
+                    <a href="#authLab" class="nav-link {{ request()->routeIs('auth-lab.*') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('vulnerable.*') ? '' : 'collapsed' }}"
+                       data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('auth-lab.*') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('vulnerable.*') ? 'true' : 'false' }}">
+                        <i class="bi bi-shield-lock"></i> Auth Lab
+                    </a>
+                    <ul class="collapse nav-collapse {{ request()->routeIs('auth-lab.*') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('vulnerable.*') ? 'show' : '' }}" id="authLab">
+                        <li class="nav-item">
+                            <a href="{{ route('auth-lab.index') }}" class="nav-link">
+                                <i class="bi bi-house"></i> Overview
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('auth-lab.comparison') }}" class="nav-link text-info">
+                                <i class="bi bi-arrows-angle-expand"></i> Comparison
+                            </a>
+                        </li>
+                        {{-- Secure Auth --}}
+                        <li class="nav-item">
+                            <a href="{{ route('login') }}" class="nav-link text-success">
+                                <i class="bi bi-box-arrow-in-right"></i> Login (Secure)
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('register') }}" class="nav-link text-success">
+                                <i class="bi bi-person-plus"></i> Register (Secure)
+                            </a>
+                        </li>
+                        {{-- Vulnerable Auth --}}
+                        <li class="nav-item">
+                            <a href="{{ route('vulnerable.login') }}" class="nav-link text-danger">
+                                <i class="bi bi-unlock"></i> Login (Vulnerable)
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('vulnerable.register') }}" class="nav-link text-danger">
+                                <i class="bi bi-person-plus-fill"></i> Register (Vulnerable)
+                            </a>
+                        </li>
+                        {{-- Demo/Debug --}}
+                        <li class="nav-item">
+                            <a href="{{ route('vulnerable.show-users') }}" class="nav-link text-warning">
+                                <i class="bi bi-database"></i> Show DB Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('vulnerable.brute-force-stats') }}" class="nav-link text-warning">
+                                <i class="bi bi-graph-up"></i> Brute Force Stats
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- TOOLS --}}
                 <li class="nav-section">Tools</li>
 
@@ -750,16 +803,61 @@
                 </a>
                 @endif
 
-                {{-- User Dropdown --}}
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> User Demo
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-                    </ul>
+                {{-- User Status & Actions --}}
+                <div class="d-flex align-items-center gap-2">
+                    @auth
+                        {{-- Secure Auth User --}}
+                        <a href="{{ route('dashboard') }}" class="btn btn-sm btn-success" title="Dashboard">
+                            <i class="bi bi-speedometer2"></i>
+                        </a>
+                        <span class="badge bg-success">
+                            <i class="bi bi-person-check"></i> {{ Auth::user()->name }}
+                        </span>
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-success" title="Logout (Secure)">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </form>
+                    @endauth
+
+                    @if(session('vulnerable_user'))
+                        {{-- Vulnerable Auth User --}}
+                        <a href="{{ route('vulnerable.dashboard') }}" class="btn btn-sm btn-danger" title="Dashboard (Vulnerable)">
+                            <i class="bi bi-speedometer2"></i>
+                        </a>
+                        <span class="badge bg-danger">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            {{ session('vulnerable_user')->name ?? 'Vulnerable User' }}
+                        </span>
+                        <form method="POST" action="{{ route('vulnerable.logout') }}" class="d-inline">
+                            @csrf
+                            <a href="{{ route('vulnerable.logout') }}" class="btn btn-sm btn-outline-danger" title="Logout (Vulnerable)"
+                               onclick="event.preventDefault(); this.closest('form').submit();">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </a>
+                        </form>
+                    @endif
+
+                    @guest
+                        @if(!session('vulnerable_user'))
+                            {{-- Not logged in --}}
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> Guest
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><h6 class="dropdown-header"><i class="bi bi-shield-check"></i> Secure Auth</h6></li>
+                                    <li><a class="dropdown-item" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right text-success"></i> Login</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('register') }}"><i class="bi bi-person-plus text-success"></i> Register</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><h6 class="dropdown-header"><i class="bi bi-exclamation-triangle"></i> Vulnerable Auth</h6></li>
+                                    <li><a class="dropdown-item" href="{{ route('vulnerable.login') }}"><i class="bi bi-unlock text-danger"></i> Login</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('vulnerable.register') }}"><i class="bi bi-person-plus-fill text-danger"></i> Register</a></li>
+                                </ul>
+                            </div>
+                        @endif
+                    @endguest
                 </div>
             </div>
         </header>
@@ -784,6 +882,13 @@
             @if (session('danger'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-triangle"></i> {{ session('danger') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if (session('info'))
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle"></i> {{ session('info') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
