@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Redirect authenticated users to dashboard when accessing guest routes (login, register)
         $middleware->redirectGuestsTo('/login');
         $middleware->redirectUsersTo('/dashboard');
+
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

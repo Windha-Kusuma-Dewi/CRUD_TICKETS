@@ -716,6 +716,65 @@
                     </ul>
                 </li>
 
+                {{-- Authorization (RBAC) - Minggu 4 Hari 2 --}}
+                <li class="nav-item">
+                    <a href="#authorizationLab" class="nav-link {{ request()->routeIs('authorization-lab.*') || request()->routeIs('admin.*') || request()->routeIs('dashboard') ? '' : 'collapsed' }}"
+                       data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('authorization-lab.*') || request()->routeIs('admin.*') || request()->routeIs('dashboard') ? 'true' : 'false' }}">
+                        <i class="bi bi-person-badge"></i> Authorization
+                    </a>
+                    <ul class="collapse nav-collapse {{ request()->routeIs('authorization-lab.*') || request()->routeIs('admin.*') || request()->routeIs('dashboard') ? 'show' : '' }}" id="authorizationLab">
+                        {{-- Lab Pages --}}
+                        <li class="nav-item">
+                            <a href="{{ route('authorization-lab.index') }}" class="nav-link {{ request()->routeIs('authorization-lab.index') ? 'active' : '' }}">
+                                <i class="bi bi-house"></i> Lab Overview
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('authorization-lab.login') }}" class="nav-link {{ request()->routeIs('authorization-lab.login') ? 'active' : '' }}">
+                                <i class="bi bi-box-arrow-in-right"></i> Test Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('authorization-lab.implementation') }}" class="nav-link {{ request()->routeIs('authorization-lab.implementation') ? 'active' : '' }}">
+                                <i class="bi bi-code-slash"></i> Implementation
+                            </a>
+                        </li>
+                        <hr class="my-1 mx-3">
+                        @auth
+                            <li class="nav-item">
+                                <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            @can('access-admin')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.dashboard') }}" class="nav-link text-danger {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                    <i class="bi bi-gear"></i> Admin Panel
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.users') }}" class="nav-link text-danger {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                                    <i class="bi bi-people"></i> Manage Users
+                                </a>
+                            </li>
+                            @endcan
+                            @can('view-reports')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.reports') }}" class="nav-link text-info {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
+                                    <i class="bi bi-graph-up-arrow"></i> Reports
+                                </a>
+                            </li>
+                            @endcan
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('authorization-lab.login') }}" class="nav-link text-muted">
+                                    <i class="bi bi-lock"></i> Login untuk Demo
+                                </a>
+                            </li>
+                        @endauth
+                    </ul>
+                </li>
+
                 {{-- TOOLS --}}
                 <li class="nav-section">Tools</li>
 
