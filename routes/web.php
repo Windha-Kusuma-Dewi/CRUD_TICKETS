@@ -3,6 +3,8 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CsrfLabController;
 use App\Http\Controllers\DemoBladeController;
+use App\Http\Controllers\Lab\SecureController;
+use App\Http\Controllers\Lab\VulnerableController;
 use App\Http\Controllers\SecurityTestController;
 use App\Http\Controllers\SqliLabController;
 use App\Http\Controllers\TicketController;
@@ -10,8 +12,6 @@ use App\Http\Controllers\ValidationLabController;
 use App\Http\Controllers\VulnerableAuth\VulnerableLoginController;
 use App\Http\Controllers\VulnerableAuth\VulnerableRegisterController;
 use App\Http\Controllers\XSSLabController;
-use App\Http\Controllers\Lab\VulnerableController;
-use App\Http\Controllers\Lab\SecureController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/dashboard', function () {
@@ -465,11 +465,6 @@ Route::prefix('vulnerable')->name('vulnerable.')->group(function () {
 });
 
 // ============================================================================
-// Secure Auth Routes (Laravel Breeze)
-// ============================================================================
-require __DIR__.'/auth.php';
-
-// ============================================================================
 // BAC/IDOR Lab Routes (Minggu 4 Hari 4 - Broken Access Control)
 // ============================================================================
 
@@ -537,3 +532,16 @@ Route::middleware('auth')->prefix('bac-lab')->name('bac-lab.')->group(function (
             ->parameters(['tickets' => 'ticket']);
     });
 });
+
+// ============================================================================
+// Error Handling Demo (Minggu 5 Hari 2 - Error Handling & Information Disclosure)
+// ============================================================================
+
+Route::get('/error-handling-demo', function () {
+    return view('error-handling-demo.index');
+})->name('error-handling-demo');
+
+// ============================================================================
+// Secure Auth Routes (Laravel Breeze)
+// ============================================================================
+require __DIR__.'/auth.php';
